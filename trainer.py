@@ -35,21 +35,6 @@ print("Loading fasttext")
 #fasttext_model = fasttext.load_model("/content/nfs/machine-learning/fasttext/cc.de.300.bin")
 print("***Fasttext Loaded****")
 
-with open('/content/nfs/machine-learning/coop_nn_dicts/0-6k_300k.pickle', 'rb') as handle:
-    first= pickle.load(handle)
-with open('/content/nfs/machine-learning/coop_nn_dicts/6-12k_300k.pickle', 'rb') as handle:
-    second=pickle.load(handle) 
-with open('/content/nfs/machine-learning/coop_nn_dicts/12-19k_300.pickle', 'rb') as handle:
-    third=pickle.load(handle)  
-
-
-first.update(second)
-merge_1=first.copy()
-third.update(merge_1)
-lookup_dict=third.copy()
-
-print("Embedding table created")
-
 def evaluate(input_sentence, target_tensor, combined_target_tensor,encoder, decoder):
     output = []
     acc_list = []
@@ -155,4 +140,8 @@ if __name__ == '__main__':
     data_path='/content/drive/MyDrive/coop_data/processed_retail_item_df_with_encoded_breadcrumbs.csv'
 
     train_data,test_data=prepare_dataframe(data_path)
+
+    print("Embedding table created")
+
+    print(sentence_augment(['disch','bimbeer','bonbons']))
 
