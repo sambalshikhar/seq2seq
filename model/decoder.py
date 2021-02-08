@@ -1,3 +1,7 @@
+import torch
+import torch.nn as nn
+from torch import optim
+
 class DecoderRNN(nn.Module):
     def __init__(self, hidden_size, 
                  output_size_1,

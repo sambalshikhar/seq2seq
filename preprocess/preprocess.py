@@ -8,10 +8,11 @@ import pandas as pd
 import numpy as np
 from tqdm.notebook import tqdm
 import math
+from sklearn.model_selection import train_test_split
 
 SOS_token = 0
 EOS_token = 1
-
+single_letter = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 class Lang:
     def __init__(self, name):
         self.name = name
@@ -41,10 +42,7 @@ def unicodeToAscii(s):
         c for c in unicodedata.normalize('NFD', s)
         if unicodedata.category(c) != 'Mn'
     )
-
-# Lowercase, trim, and remove non-letter characters
-single_letter = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']    
-
+    
 def normalizeString(s):
     s = unicodeToAscii(s).lower().strip()
     s = re.sub(r"([.!?])", r" \1", s)
@@ -107,3 +105,18 @@ def tensorFromCombinedBreadcrumb(input_object,combined_breadcrumb):
             # print(e)
             break
     return indexes
+
+def prepare_dataframe(path):
+    df = pd.read_csv(path)
+    df = df.replace(np.nan,"",regex=True)
+    df = df.replace("None","",regex=True)
+    df = df.dropna(subset=['Unnamed: 1','hierarchie_str'])
+
+    map_bread_to_count = dict(df['hierarchie_str'].value_counts())
+    df['count'] = df['hierarchie_str'].apply(lambda x:map_bread_to_count[x])
+    df = df.append(df[df['count']==1],ignore_index=True)
+
+    data = df
+    train_data, test_data = train_test_split(data, test_size=0.2, random_state=1, stratify=data['hierarchie_str']) 
+    print(train_data.shape)
+    return train_data,test_data

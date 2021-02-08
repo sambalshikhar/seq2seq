@@ -1,0 +1,17 @@
+Loading fasttext
+***Fasttext Loaded****
+wandb: WARNING Calling run.save without any arguments is deprecated.Changes to attributes are automatically persisted.
+Embedding table created
+sys:1: DtypeWarning: Columns (5) have mixed types.Specify dtype option on import or set low_memory=False.
+Traceback (most recent call last):
+  File "trainer.py", line 157, in <module>
+    train_data,test_data=prepare_dataframe(data_path)
+  File "/content/seq2seq/preprocess/preprocess.py", line 115, in prepare_dataframe
+    train_data, test_data = train_test_split(data, test_size=0.2, random_state=1, stratify=data['hierarchie_str'])
+  File "/usr/local/lib/python3.6/dist-packages/sklearn/model_selection/_split.py", line 2143, in train_test_split
+    train, test = next(cv.split(X=arrays[0], y=stratify))
+  File "/usr/local/lib/python3.6/dist-packages/sklearn/model_selection/_split.py", line 1329, in split
+    for train, test in self._iter_indices(X, y, groups):
+  File "/usr/local/lib/python3.6/dist-packages/sklearn/model_selection/_split.py", line 1659, in _iter_indices
+    raise ValueError("The least populated class in y has only 1"
+ValueError: The least populated class in y has only 1 member, which is too few. The minimum number of groups for any class cannot be less than 2.

@@ -1,0 +1,38 @@
+2021-02-08 20:04:32,693 INFO    MainThread:3662 [wandb_setup.py:_flush():70] setting env: {}
+2021-02-08 20:04:32,693 INFO    MainThread:3662 [wandb_setup.py:_flush():70] multiprocessing start_methods=fork,spawn,forkserver
+2021-02-08 20:04:32,693 INFO    MainThread:3662 [wandb_setup.py:_flush():70] setting login settings: {}
+2021-02-08 20:04:32,693 INFO    MainThread:3662 [wandb_setup.py:_flush():70] setting login settings: {'mode': 'offline'}
+2021-02-08 20:04:32,693 INFO    MainThread:3662 [wandb_init.py:_log_setup():318] Logging user logs to /content/seq2seq/wandb/offline-run-20210208_200432-31l35vub/logs/debug.log
+2021-02-08 20:04:32,693 INFO    MainThread:3662 [wandb_init.py:_log_setup():319] Logging internal logs to /content/seq2seq/wandb/offline-run-20210208_200432-31l35vub/logs/debug-internal.log
+2021-02-08 20:04:34,928 INFO    MainThread:3662 [wandb_run.py:_console_start():1399] atexit reg
+2021-02-08 20:04:34,928 INFO    MainThread:3662 [wandb_run.py:_redirect():1262] redirect: SettingsConsole.REDIRECT
+2021-02-08 20:04:34,930 INFO    MainThread:3662 [wandb_run.py:_redirect():1267] Redirecting console.
+2021-02-08 20:04:34,930 INFO    MainThread:3662 [redirect.py:install():213] install start
+2021-02-08 20:04:34,930 INFO    MainThread:3662 [redirect.py:install():228] install stop
+2021-02-08 20:04:34,930 INFO    MainThread:3662 [redirect.py:install():213] install start
+2021-02-08 20:04:34,930 INFO    MainThread:3662 [redirect.py:install():228] install stop
+2021-02-08 20:04:34,930 INFO    MainThread:3662 [wandb_run.py:_redirect():1313] Redirects installed.
+2021-02-08 20:04:38,027 INFO    MainThread:3662 [wandb_run.py:_atexit_cleanup():1369] got exitcode: 1
+2021-02-08 20:04:38,028 INFO    MainThread:3662 [wandb_run.py:_restore():1341] restore
+2021-02-08 20:04:38,029 INFO    MainThread:3662 [redirect.py:uninstall():232] uninstall start
+2021-02-08 20:04:38,029 INFO    MainThread:3662 [redirect.py:_stop():287] _stop: stdout
+2021-02-08 20:04:38,030 INFO    MainThread:3662 [redirect.py:_stop():293] _stop closed: stdout
+2021-02-08 20:04:38,030 INFO    stdout    :3662 [redirect.py:_pipe_relay():129] relay done saw last write: stdout
+2021-02-08 20:04:38,030 INFO    stdout    :3662 [redirect.py:_pipe_relay():145] relay done done: stdout
+2021-02-08 20:04:38,030 INFO    MainThread:3662 [redirect.py:_stop():299] _stop joined: stdout
+2021-02-08 20:04:38,031 INFO    MainThread:3662 [redirect.py:_stop():301] _stop rd closed: stdout
+2021-02-08 20:04:38,031 INFO    MainThread:3662 [redirect.py:uninstall():236] uninstall done
+2021-02-08 20:04:38,031 INFO    MainThread:3662 [redirect.py:uninstall():232] uninstall start
+2021-02-08 20:04:38,031 INFO    MainThread:3662 [redirect.py:_stop():287] _stop: stderr
+2021-02-08 20:04:38,031 INFO    stderr    :3662 [redirect.py:_pipe_relay():129] relay done saw last write: stderr
+2021-02-08 20:04:38,031 INFO    MainThread:3662 [redirect.py:_stop():293] _stop closed: stderr
+2021-02-08 20:04:38,031 INFO    stderr    :3662 [redirect.py:_pipe_relay():145] relay done done: stderr
+2021-02-08 20:04:38,032 INFO    MainThread:3662 [redirect.py:_stop():299] _stop joined: stderr
+2021-02-08 20:04:38,032 INFO    MainThread:3662 [redirect.py:_stop():301] _stop rd closed: stderr
+2021-02-08 20:04:38,032 INFO    MainThread:3662 [redirect.py:uninstall():236] uninstall done
+2021-02-08 20:04:38,036 INFO    MainThread:3662 [wandb_run.py:_wait_for_finish():1492] got exit ret: 
+2021-02-08 20:04:40,040 INFO    MainThread:3662 [wandb_run.py:_wait_for_finish():1492] got exit ret: done: true
+exit_result {
+}
+
+2021-02-08 20:04:41,363 INFO    MainThread:3662 [internal.py:handle_exit():156] Internal process exited

@@ -1,3 +1,7 @@
+import torch
+import torch.nn as nn
+from torch import optim
+
 class EncoderRNN(nn.Module):
     def __init__(self, input_size, hidden_size):
         super(EncoderRNN, self).__init__()

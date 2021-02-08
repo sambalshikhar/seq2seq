@@ -1,0 +1,5 @@
+Loading fasttext
+***Fasttext Loaded****
+Embedding table created
+sys:1: DtypeWarning: Columns (5) have mixed types.Specify dtype option on import or set low_memory=False.
+(73449, 20)
