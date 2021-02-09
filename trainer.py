@@ -11,7 +11,7 @@ import torch
 import torch.nn as nn
 from torch import optim
 import torch.nn.functional as F
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 import matplotlib.pyplot as plt
 import math
 import fasttext
@@ -25,24 +25,24 @@ from utils.embed_utils import *
 from utils.trainer_utils import *
 from preprocess.preprocess import *
 from preprocess.prepare_dicts import *
+from config import train_config as config
 
 #wandb.init(project="coop_text_classification")
 #wandb.run.name = "seq2seq_simple_fasttext_augmented"
 #wandb.run.save()
 
-device = torch.device("cuda")
+device = config['device']
 
 if __name__ == '__main__':
 
-    hidden_size = 300
-    teacher_forcing_ratio = 0.5
-    learning_rate = 1e-2
-    epochs = 10
-    batch_size=32
-    data_path='/content/drive/MyDrive/coop_data/processed_retail_item_df_with_encoded_breadcrumbs.csv'
-
-    exp_name = "simple_encoder_step_lr_fasttext_augmented"
-    exp_name_init="simple_encoder_step_lr_fasttext"
+    hidden_size = config['hidden_size']
+    teacher_forcing_ratio = config['teacher_forcing_ratio']
+    learning_rate = config['learning_rate']
+    epochs = config['epochs']
+    batch_size=config['batch_size']
+    data_path=config['batch_size']
+    exp_name = config['exp_name']
+    exp_name_init= config['exp_name_init']
     
 
     train_data,test_data,main_data=prepare_dataframe(data_path)

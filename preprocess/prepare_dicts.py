@@ -1,6 +1,7 @@
 from .preprocess import *
 import torch
-device = torch.device("cuda")
+from config import train_config as config
+device = config['device']
 
 def get_dicts(data):
     input_de = prepareData('input_de',data[data['Unnamed: 1']!=""]['Unnamed: 1'].tolist(),is_words=False)

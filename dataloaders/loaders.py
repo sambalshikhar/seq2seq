@@ -16,14 +16,16 @@ import torch
 import torch.nn as nn
 from torch import optim
 import torch.nn.functional as F
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 import matplotlib.pyplot as plt
 import math
 import fasttext
 import pickle
 import wandb
+from config import train_config
 
-device = torch.device("cuda")
+device = train_config['device']
+teacher_forcing_ratio = train_config['teacher_forcing_ratio']
 
 def evaluate(input_sentence, target_tensor, combined_target_tensor,encoder,decoder,input_de,target_combined_words,target_dict):
     output = []
@@ -186,14 +188,14 @@ def trainIters(train_data,encoder,decoder,encoder_optimizer,decoder_optimizer,in
             print_loss_total = 0
             print('%s (%d %d%%) %.4f' % (timeSince(start, iter / n_iters),
                                         iter, iter / n_iters * 100, print_loss_avg))
-            wandb.log({"loss":print_loss_avg})
+            #wandb.log({"loss":print_loss_avg})
             for _,val in acc_dict.items():
                 print(f"{val.name}==>{val.getAcc()}")
-                wandb.log({val.name:val.getAcc()})
+                #wandb.log({val.name:val.getAcc()})
 
             for _,val in multi_acc_dict.items():
                 print(f"{val.name}==>{val.getAcc()}")
-                wandb.log({val.name:val.getAcc()})    
+                #wandb.log({val.name:val.getAcc()})    
 
 
         if iter % plot_every == 0:

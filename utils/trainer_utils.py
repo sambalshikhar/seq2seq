@@ -4,7 +4,6 @@ import matplotlib.ticker as ticker
 import numpy as np
 import time
 import math
-import fasttext
 
 def showPlot(points):
     plt.figure()

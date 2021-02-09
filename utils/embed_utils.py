@@ -2,12 +2,16 @@
 import random
 import pickle 
 import torch
-device = torch.device("cuda")
+import fasttext
+ 
+from config import train_config as config
+device =config['device']
 
-#print("***Loading fasttext***")
-#fasttext_model = fasttext.load_model("/content/nfs/machine-learning/fasttext/cc.de.300.bin")
-#print("***Fasttext Loaded****")
+print("***Loading fasttext***")
+fasttext_model = fasttext.load_model("/content/nfs/machine-learning/fasttext/cc.de.300.bin")
+print("***Fasttext Loaded****")
 
+print("Loading lookup_dict")
 with open('/content/nfs/machine-learning/coop_nn_dicts/0-6k_300k.pickle', 'rb') as handle:
     first= pickle.load(handle)
 with open('/content/nfs/machine-learning/coop_nn_dicts/6-12k_300k.pickle', 'rb') as handle:
