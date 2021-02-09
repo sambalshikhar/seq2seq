@@ -1,9 +1,130 @@
-def trainIters(encoder, decoder, train_input_tensor,train_target_tensor,train_combined_target_tensor,encoder_optimizer,decoder_optimizer,print_every=5, plot_every=5):
+from model.decoder import *
+from model.encoder import *
+from utils.embed_utils import *
+from utils.trainer_utils import *
+from preprocess.preprocess import *
+from preprocess.prepare_dicts import *
+
+from io import open
+import unicodedata
+import string
+import re
+import random
+import pandas as pd
+import numpy as np
+import torch
+import torch.nn as nn
+from torch import optim
+import torch.nn.functional as F
+from tqdm.notebook import tqdm
+import matplotlib.pyplot as plt
+import math
+import fasttext
+import pickle
+import wandb
+
+device = torch.device("cuda")
+
+def evaluate(input_sentence, target_tensor, combined_target_tensor,encoder,decoder,input_de,target_combined_words,target_dict):
+    output = []
+    acc_list = []
+    encoder_hidden = encoder.initHidden()
+    input_length = len(input_sentence)
+    target_length = target_tensor.size(0)
+
+    for ei in range(input_length):
+        emb=get_word_embedding(input_sentence[ei])
+        emb=torch.tensor(emb)
+        input_vector=torch.unsqueeze(emb,0).to(device)
+        encoder_output, encoder_hidden = encoder(
+            input_vector, encoder_hidden)
+    
+    decoder_input = combined_target_tensor[0]
+    decoder_hidden = encoder_hidden
+
+    for di in range(target_length-1):
+        decoder_output, decoder_hidden = decoder(decoder_input, decoder_hidden, di)
+        topv, topi = decoder_output.topk(1)
+        topi_word = target_dict[str(di+1)].index2word[topi.item()]
+        decoder_input = torch.tensor(target_combined.word2index[topi_word],device=device)
+        output.append(topi_word)
+        if target_tensor[di].item()==decoder_output.topk(1)[1].item():
+            acc_list.append(1)
+        else:
+            acc_list.append(0)
+        if topi_word == "EOS":
+            break
+    return output,acc_list
+
+def train(input_sentence, target_tensor, combined_target_tensor,encoder, decoder, encoder_optimizer, decoder_optimizer, criterion,input_de,target_combined,target_dict):
+
+    encoder_hidden = encoder.initHidden()
+
+    encoder_optimizer.zero_grad()
+    decoder_optimizer.zero_grad()
+
+    input_length = len(input_sentence)
+    target_length = target_tensor.size(0)
+
+    loss = 0
+
+    acc_list = []
+
+    
+
+    for ei in range(input_length):
+        emb=get_word_embedding(input_sentence[ei])
+        emb=torch.tensor(emb)
+        input_vector=torch.unsqueeze(emb,0).to(device)
+        encoder_output, encoder_hidden = encoder(
+            input_vector, encoder_hidden)
+        
+    decoder_input = combined_target_tensor[0]
+    decoder_hidden = encoder_hidden
+
+    use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
+
+    if use_teacher_forcing:
+        for di in range(target_length-1):
+            decoder_output, decoder_hidden = decoder(decoder_input, decoder_hidden, di)
+            loss += criterion(decoder_output, target_tensor[di])
+            decoder_input = combined_target_tensor[di+1]
+            # acc.append(decoder_output.topk(1)[1].item())
+            if target_tensor[di].item()==decoder_output.topk(1)[1].item():
+                acc_list.append(1)
+            else:
+                acc_list.append(0)
+
+    else:
+        for di in range(target_length-1):
+            decoder_output, decoder_hidden = decoder(decoder_input, decoder_hidden, di)
+            loss += criterion(decoder_output, target_tensor[di])
+            topv, topi = decoder_output.topk(1)
+            topi_word = target_dict[str(di+1)].index2word[topi.item()]
+            decoder_input = torch.tensor(target_combined.word2index[topi_word],device=device)
+            # acc.append(decoder_output.topk(1)[1].item())
+            # print(decoder_output.topk(1)[1].item())
+            if target_tensor[di].item()==decoder_output.topk(1)[1].item():
+                acc_list.append(1)
+            else:
+                acc_list.append(0)
+
+    
+
+    loss.backward()
+
+    encoder_optimizer.step()
+    decoder_optimizer.step()
+
+    # acc = torch.tensor(acc).reshape(target_length-1,1) == target_tensor.detach()[:target_length-1]
+    return loss.item() / target_length, acc_list
+
+def trainIters(train_data,encoder,decoder,encoder_optimizer,decoder_optimizer,input_de,target_combined,target_dict,print_every=5, plot_every=5):
     encoder.train()
     decoder.train()
 
     start = time.time()
-    n_iters = len(train_input_tensor)
+    n_iters = train_data.shape[0]
     criterion = nn.NLLLoss()
     plot_losses = []
     accuracies = []
@@ -47,7 +168,7 @@ def trainIters(encoder, decoder, train_input_tensor,train_target_tensor,train_co
         target_tensor,combined_target_tensor=torch.tensor(target_tensor, dtype=torch.long, device=device).view(-1, 1),torch.tensor(combined_target_tensor, dtype=torch.long, device=device).view(-1, 1)
 
         loss,accuracy = train(input_sentence, target_tensor, combined_target_tensor,encoder,
-                    decoder, encoder_optimizer, decoder_optimizer, criterion)
+                    decoder, encoder_optimizer, decoder_optimizer, criterion,input_de,target_combined,target_dict)
         
         print_loss_total += loss
         plot_loss_total += loss
@@ -85,7 +206,7 @@ def trainIters(encoder, decoder, train_input_tensor,train_target_tensor,train_co
 
     return acc_dict
 
-def testIters(test_input_tensor,test_target_tensor,test_combined_target_tensor,encoder, decoder,print_every=5000):
+def testIters(test_data,encoder,decoder,input_de,target_combined,target_dict,print_every=5000):
     encoder.eval()
     decoder.eval()
 
@@ -117,7 +238,7 @@ def testIters(test_input_tensor,test_target_tensor,test_combined_target_tensor,e
         combined_target_tensor=tensorFromCombinedBreadcrumb(target_combined,input_target)
         target_tensor,combined_target_tensor=torch.tensor(target_tensor, dtype=torch.long, device=device).view(-1, 1),torch.tensor(combined_target_tensor, dtype=torch.long, device=device).view(-1, 1)
 
-        _,accuracy = evaluate(input_sentence,target_tensor,combined_target_tensor, encoder, decoder)
+        _,accuracy = evaluate(input_sentence,target_tensor,combined_target_tensor, encoder, decoder,input_de,target_combined_words,target_dict)
         for i,acc in enumerate(accuracy):
             acc_dict[i+1].addScore(acc)
             if sum(accuracy[:i+1])==i+1:
@@ -129,10 +250,10 @@ def testIters(test_input_tensor,test_target_tensor,test_combined_target_tensor,e
         if iter % print_every == 0:
             for _,val in acc_dict.items():
                 print(f"{val.name}==>{val.getAcc()}")
-                wandb.log({val.name:val.getAcc()})
+                #wandb.log({val.name:val.getAcc()})
             for _,val in multi_acc_dict.items():
                 print(f"{val.name}==>{val.getAcc()}")
 
-                wandb.log({val.name:val.getAcc()})  
+                #wandb.log({val.name:val.getAcc()})  
         iter+=1
     return acc_dict,multi_acc_dict    

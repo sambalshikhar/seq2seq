@@ -1,4 +1,6 @@
 from .preprocess import *
+import torch
+device = torch.device("cuda")
 
 def get_dicts(data):
     input_de = prepareData('input_de',data[data['Unnamed: 1']!=""]['Unnamed: 1'].tolist(),is_words=False)
@@ -42,4 +44,4 @@ def get_dicts(data):
 
     target_dict = {"1":target_l1,"2":target_l2,"3":target_l3,"4":target_l4,"5":target_l5}
 
-    return input_de,target_combined_words,target_dict
+    return input_de,target_combined,target_dict

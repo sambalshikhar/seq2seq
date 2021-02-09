@@ -119,4 +119,4 @@ def prepare_dataframe(path):
     data = df
     train_data, test_data = train_test_split(data, test_size=0.2, random_state=1, stratify=data['hierarchie_str']) 
     print(train_data.shape)
-    return train_data,test_data
+    return train_data,test_data,data

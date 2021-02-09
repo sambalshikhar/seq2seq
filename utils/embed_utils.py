@@ -1,7 +1,12 @@
 
 import random
 import pickle 
+import torch
+device = torch.device("cuda")
 
+#print("***Loading fasttext***")
+#fasttext_model = fasttext.load_model("/content/nfs/machine-learning/fasttext/cc.de.300.bin")
+#print("***Fasttext Loaded****")
 
 with open('/content/nfs/machine-learning/coop_nn_dicts/0-6k_300k.pickle', 'rb') as handle:
     first= pickle.load(handle)
@@ -14,6 +19,7 @@ first.update(second)
 merge_1=first.copy()
 third.update(merge_1)
 lookup_dict=third.copy()
+
 
 def sentence_augment(sentence,n_permutes=1,n_terms=1,topn=7):
     candidate_position=random.sample([i for i in range(len(sentence))], n_terms)
