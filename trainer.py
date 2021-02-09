@@ -40,7 +40,7 @@ if __name__ == '__main__':
     learning_rate = config['learning_rate']
     epochs = config['epochs']
     batch_size=config['batch_size']
-    data_path=config['batch_size']
+    data_path=config['data_path']
     exp_name = config['exp_name']
     exp_name_init= config['exp_name_init']
     

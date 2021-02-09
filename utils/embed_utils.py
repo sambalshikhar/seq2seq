@@ -2,13 +2,13 @@
 import random
 import pickle 
 import torch
-import fasttext
- 
+import fasttext 
 from config import train_config as config
+
 device =config['device']
 
 print("***Loading fasttext***")
-fasttext_model = fasttext.load_model("/content/nfs/machine-learning/fasttext/cc.de.300.bin")
+fasttext_model = fasttext.load_model(config['fasttext_path'])
 print("***Fasttext Loaded****")
 
 print("Loading lookup_dict")
